@@ -1,62 +1,75 @@
 # Kosmos.Kreator
 
-A lightweight, no-build Wildspace / Crystal Sphere interior cartographer for creating ordinary and gloriously non-Keplerian Spelljammer systems.
+A browser-based Wildspace / Crystal Sphere interior cartographer for Spelljammer-style cosmologies.
 
-## v0.1 prototype
+The app is intentionally static and dependency-free: open `index.html`, or use the GitHub Pages deployment.
 
-The first working version is a static HTML + SVG app. It currently supports:
+## v0.2
 
-- an interactive top-down Kosmos map centered on a Sun
-- orbiting bodies with uploaded PNG/JPEG/WebP/GIF/SVG artwork
-- semi-major radius / distance from the Sun
-- orbital phase using the map convention **0° = up, 90° = right, 180° = down, 270° = left**
-- eccentricity
-- ellipse rotation
-- orbital inclination and line-of-nodes direction
-- deliberately non-physical X/Y orbit offsets for strange Kosmoi
-- direct dragging of a body along its projected orbit to change phase
-- show/hide orbit and labels
-- save/open the full system as JSON
-- SVG export with embedded body images
-- a built-in Realmspace-shaped demo dataset plus `examples/realmspace.json`
+Kosmos.Kreator now separates **cosmology**, **cartographic presentation**, and **interactive atlas behavior**.
 
-No framework, package install, server, or build step is required.
+- 3D orbital geometry projected into a 2D SVG map
+- Semi-major radius, phase, eccentricity, ellipse rotation, inclination, node, and free orbit offset
+- Crystal Shell radius, travel-distance label, and show/hide controls
+- Shell portals positioned by **theta plus inclination**, so gates can live above or below the normal orbital plane
+- Collapsible map groups for keeping inner systems readable at outer-system scale
+- Static SVG export preserves the current collapsed/expanded state
+- Interactive HTML export starts from the current map state and lets readers unfold clickable groups
+- Bodies, groups, and portals can carry `loreId` and `sceneTarget` hooks for a larger nested atlas
+- External lore JSON can be loaded and merged into the current Kosmos
+- v0.1 JSON remains loadable and is upgraded in memory to the v0.2 schema
 
-## Run it
+## Coordinate conventions
 
-Open `index.html` in a modern browser. For normal development, a tiny local static server is recommended so the project behaves the same way it will on GitHub Pages:
+### Orbits
 
-```bash
-python -m http.server 8000
-```
+- `phase = 0°` points straight up on the map before orbit transforms
+- `90°` points right
+- `180°` points down
+- `270°` points left
+- `inclination` tilts the orbital plane
+- `node` controls the direction of that tilt
 
-Then visit `http://localhost:8000`.
+### Crystal Shell portals
 
-Because all runtime code is client-side, the project can also be published directly with GitHub Pages from the repository root.
+A portal is a point on a sphere, not an orbit.
 
-## Data model
+- `theta` is longitude around the normal orbital plane using the same map convention
+- `inclination = 0°` lies on the normal orbital plane / visible shell rim
+- positive inclination lies on the upper hemisphere
+- negative inclination lies on the lower hemisphere
+- `+90°` and `-90°` are the poles
 
-A body stores its display settings and orbital parameters independently:
+The top-down projection naturally moves high-inclination portals inward from the rim. Lower-hemisphere portals render faded/dashed so the map still communicates depth.
 
-```json
-{
-  "name": "Toril",
-  "size": 35,
-  "orbit": {
-    "radius": 200,
-    "phase": 265,
-    "eccentricity": 0,
-    "rotation": 0,
-    "inclination": 0,
-    "node": 0,
-    "offsetX": 0,
-    "offsetY": 0
-  }
-}
-```
+## Map groups
 
-Orbit geometry is generated in 3D and then projected onto the 2D SVG map. That keeps a genuinely eccentric orbit distinct from a circular orbit that merely *looks* elliptical because its orbital plane is inclined.
+Bodies may reference a `groupId`. A group owns only presentation state; it does **not** change the bodies' real orbital coordinates.
 
-## Intended next steps
+When a group is collapsed, member bodies and their orbit lines are hidden and replaced by one marker at the group's configured anchor. Expanding restores the true geometry.
 
-Once the core editor is pleasant to use, likely additions include parent bodies/moons, belts and arcs, free paths, depth styling for inclined orbits, map themes, travel-distance tools, time/phase animation, and a more general free-focus / impossible-orbit mode.
+This is useful for cases such as Realmspace, where the inner planets can collapse to one central marker so the map can retain a sane scale for Glyth, Garden, H'catha, and the Crystal Shell.
+
+## Lore and nested atlas hooks
+
+Load a lore JSON file with **Load lore**. Kosmos.Kreator accepts:
+
+- a keyed object
+- `{ "lore": { ... } }`
+- an `entries` array
+- a `locations` array
+
+Bodies, groups, and portals can reference entries with `loreId` and can point toward another map/scene or URL with `sceneTarget`.
+
+The interactive HTML exporter already uses lore entries for popups and preserves `sceneTarget` values. A future atlas router can use those targets to move between a flow map, a Kosmos scene, a planetary neighborhood, and deeper location maps without changing the underlying Kosmos files.
+
+## Realmspace demo
+
+The built-in Realmspace example demonstrates:
+
+- a 32-day Crystal Shell at radius 3200
+- H'catha at radius 1600, corresponding to the 16-day reference scale
+- an initially collapsed Inner Worlds group
+- one upper-hemisphere and one lower-hemisphere Phlogiston portal
+
+`examples/realmspace.json` contains the same structure as editable data.
