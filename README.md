@@ -2,9 +2,23 @@
 
 A lightweight, no-build Spelljammer atlas editor for Wildspace systems, Crystal Spheres, local celestial neighborhoods, shell portals, lore popups, and drill-down scenes.
 
+## v0.3.1 — Art + composable actions
+
+The editor now has a **Preview** mode, so you can hide the authoring sidebars and use the atlas directly without exporting an Interactive HTML file first.
+
+Artwork is no longer limited to ordinary orbiting bodies. Scene centers, bodies, collapsed groups, regions, POIs, and shell portals can all carry embedded artwork, and each scene can also carry an optional background image. Region art has its own opacity control, while symbols remain useful fallbacks for small features.
+
+Interactions are now composable rather than mutually exclusive. A single object may expose any combination of:
+
+- **ⓘ Lore** — open its lore entry
+- **＋ / − Expand** — expand or collapse a target map group in place
+- **↗ Enter** — open a linked atlas scene
+
+The editor and interactive HTML export present these as separate controls. Older v0.3 `interaction` fields and older `sceneTarget` fields are migrated in memory to the new action model when JSON is opened.
+
 ## v0.3 — Atlas Scenes
 
-The editor now separates **cosmology**, **presentation**, and **interaction**. A body can remain at its true orbital coordinates while its group is collapsed for a particular map scale. A major object can open another scene, while a minor wreck or anchorage can simply open lore.
+The editor separates **cosmology**, **presentation**, and **interaction**. A body can remain at its true orbital coordinates while its group is collapsed for a particular map scale. A major object can open another scene, while a minor wreck or anchorage can simply open lore.
 
 Current features include:
 
@@ -26,7 +40,7 @@ Current features include:
 - draggable animated bodies; dragging rewrites epoch phase rather than corrupting current simulation time
 - static SVG snapshots at the current animation instant
 - self-contained interactive HTML export with scenes, breadcrumbs, popups, collapsed groups, and animation
-- v0.1/v0.2 JSON upgrade into a one-scene v0.3 atlas
+- v0.1/v0.2 JSON upgrade into a one-scene atlas
 - separate lore JSON loading
 
 No framework, package install, server, or build step is required.
@@ -43,11 +57,11 @@ Then open `http://localhost:8000`.
 
 ## Scene model
 
-A v0.3 file is an atlas containing scenes:
+A current file is an atlas containing scenes:
 
 ```json
 {
-  "schema": "kosmos-kreator/v0.3",
+  "schema": "kosmos-kreator/v0.3.1",
   "name": "Realmspace Atlas",
   "rootSceneId": "realmspace",
   "scenes": [
@@ -66,16 +80,17 @@ A v0.3 file is an atlas containing scenes:
 }
 ```
 
-Interactive objects use a simple action contract:
+Interactive objects may now combine actions:
 
 ```json
-{ "interaction": { "type": "scene", "target": "rock-of-bral" } }
-```
-
-or:
-
-```json
-{ "interaction": { "type": "popup", "target": "" }, "loreId": "lucent-edict" }
+{
+  "loreId": "tears-of-selune",
+  "actions": {
+    "lore": { "enabled": true },
+    "expand": { "enabled": true, "target": "tears-detail" },
+    "scene": { "enabled": true, "target": "tears-local" }
+  }
+}
 ```
 
 Containment does not force navigation. The Rock of Bral may be visually located inside the Tears of Selûne while remaining a direct scene destination from the Toril neighborhood.
