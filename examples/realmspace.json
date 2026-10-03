@@ -1,16 +1,69 @@
 {
-  "schema": "kosmos-kreator/v0.1",
+  "schema": "kosmos-kreator/v0.2",
   "name": "Realmspace",
+  "subtitle": "Crystal Sphere Interior · Wildspace Kosmos",
+  "mapUnits": "million miles",
   "viewRadius": 3400,
-  "sun": { "name": "Sun", "size": 64 },
+  "sun": { "name": "Sol", "size": 64 },
+  "shell": {
+    "radius": 3200,
+    "travelDays": 32,
+    "label": "Crystal Shell · 32 days from Sol",
+    "show": true,
+    "showPortals": true
+  },
+  "groups": [
+    {
+      "id": "inner-realmspace",
+      "name": "Inner Worlds",
+      "collapsed": true,
+      "interactive": true,
+      "anchor": { "radius": 0, "theta": 0, "inclination": 0 },
+      "size": 66,
+      "loreId": "inner-realmspace",
+      "sceneTarget": "realmspace-inner"
+    }
+  ],
+  "portals": [
+    {
+      "id": "mercane-gate",
+      "name": "Mercane Gate",
+      "type": "phlogiston",
+      "theta": 40,
+      "inclination": 28,
+      "size": 24,
+      "labelOffset": 26,
+      "showLabel": true,
+      "loreId": "mercane-gate",
+      "sceneTarget": "outer-mercane-flow"
+    },
+    {
+      "id": "deep-gate",
+      "name": "Deep Gate",
+      "type": "phlogiston",
+      "theta": 218,
+      "inclination": -37,
+      "size": 24,
+      "labelOffset": 26,
+      "showLabel": true,
+      "loreId": "deep-gate",
+      "sceneTarget": "apeiron-flow"
+    }
+  ],
   "bodies": [
-    { "id": "anadia", "name": "Anadia", "image": "", "size": 24, "labelOffset": 34, "orbit": { "radius": 50, "phase": 10, "eccentricity": 0, "rotation": 0, "inclination": 0, "node": 0, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "coliar", "name": "Coliar", "image": "", "size": 29, "labelOffset": 34, "orbit": { "radius": 100, "phase": 150, "eccentricity": 0, "rotation": 0, "inclination": 3, "node": 35, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "toril", "name": "Toril", "image": "", "size": 35, "labelOffset": 34, "orbit": { "radius": 200, "phase": 265, "eccentricity": 0, "rotation": 0, "inclination": 0, "node": 0, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "karpri", "name": "Karpri", "image": "", "size": 34, "labelOffset": 34, "orbit": { "radius": 300, "phase": 330, "eccentricity": 0.08, "rotation": 20, "inclination": 9, "node": 70, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "chandos", "name": "Chandos", "image": "", "size": 41, "labelOffset": 34, "orbit": { "radius": 400, "phase": 195, "eccentricity": 0.05, "rotation": -12, "inclination": 15, "node": 110, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "glyth", "name": "Glyth", "image": "", "size": 42, "labelOffset": 34, "orbit": { "radius": 1000, "phase": 315, "eccentricity": 0.1, "rotation": 12, "inclination": 7, "node": 20, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "garden", "name": "Garden", "image": "", "size": 42, "labelOffset": 34, "orbit": { "radius": 1200, "phase": 265, "eccentricity": 0.03, "rotation": 50, "inclination": -6, "node": 150, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true },
-    { "id": "hcatha", "name": "H'catha", "image": "", "size": 38, "labelOffset": 34, "orbit": { "radius": 1600, "phase": 95, "eccentricity": 0.14, "rotation": -15, "inclination": 18, "node": 40, "offsetX": 0, "offsetY": 0 }, "showOrbit": true, "showLabel": true }
-  ]
+    { "id": "anadia", "name": "Anadia", "size": 24, "groupId": "inner-realmspace", "loreId": "anadia", "showOrbit": true, "showLabel": true, "orbit": { "radius": 50, "phase": 10, "eccentricity": 0, "rotation": 0, "inclination": 0, "node": 0, "offsetX": 0, "offsetY": 0 } },
+    { "id": "coliar", "name": "Coliar", "size": 29, "groupId": "inner-realmspace", "loreId": "coliar", "showOrbit": true, "showLabel": true, "orbit": { "radius": 100, "phase": 150, "eccentricity": 0, "rotation": 0, "inclination": 3, "node": 35, "offsetX": 0, "offsetY": 0 } },
+    { "id": "toril", "name": "Toril", "size": 35, "groupId": "inner-realmspace", "loreId": "toril", "sceneTarget": "toril-local", "showOrbit": true, "showLabel": true, "orbit": { "radius": 200, "phase": 265, "eccentricity": 0, "rotation": 0, "inclination": 0, "node": 0, "offsetX": 0, "offsetY": 0 } },
+    { "id": "karpri", "name": "Karpri", "size": 34, "groupId": "inner-realmspace", "loreId": "karpri", "showOrbit": true, "showLabel": true, "orbit": { "radius": 300, "phase": 330, "eccentricity": 0.08, "rotation": 20, "inclination": 9, "node": 70, "offsetX": 0, "offsetY": 0 } },
+    { "id": "chandos", "name": "Chandos", "size": 41, "groupId": "inner-realmspace", "loreId": "chandos", "showOrbit": true, "showLabel": true, "orbit": { "radius": 400, "phase": 195, "eccentricity": 0.05, "rotation": 348, "inclination": 15, "node": 110, "offsetX": 0, "offsetY": 0 } },
+    { "id": "glyth", "name": "Glyth", "size": 42, "loreId": "glyth", "showOrbit": true, "showLabel": true, "orbit": { "radius": 1000, "phase": 315, "eccentricity": 0.1, "rotation": 12, "inclination": 7, "node": 20, "offsetX": 0, "offsetY": 0 } },
+    { "id": "garden", "name": "Garden", "size": 42, "loreId": "garden", "showOrbit": true, "showLabel": true, "orbit": { "radius": 1200, "phase": 265, "eccentricity": 0.03, "rotation": 50, "inclination": -6, "node": 150, "offsetX": 0, "offsetY": 0 } },
+    { "id": "hcatha", "name": "H'catha", "size": 38, "loreId": "hcatha", "showOrbit": true, "showLabel": true, "orbit": { "radius": 1600, "phase": 95, "eccentricity": 0.14, "rotation": 345, "inclination": 18, "node": 40, "offsetX": 0, "offsetY": 0 } }
+  ],
+  "lore": {
+    "inner-realmspace": { "name": "Inner Worlds", "summary": "A cartographic group for the close-packed inner worlds. Expand it to reveal their true orbits." },
+    "toril": { "name": "Toril", "summary": "Primary world of Realmspace. Attach a richer lore JSON to replace this demo entry." },
+    "mercane-gate": { "name": "Mercane Gate", "summary": "A shell portal positioned above the normal orbital plane." },
+    "deep-gate": { "name": "Deep Gate", "summary": "A lower-hemisphere passage through the Crystal Shell." }
+  }
 }
