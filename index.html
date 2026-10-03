@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090b16" />
+  <title>Kosmos.Kreator</title>
+  <link rel="stylesheet" href="styles/kosmos.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">WILDSPACE SYSTEM CARTOGRAPHER</p>
+      <h1>Kosmos.Kreator</h1>
+    </div>
+    <div class="toolbar" aria-label="File and export controls">
+      <button id="newSystemBtn" type="button">New</button>
+      <button id="loadRealmspaceBtn" type="button">Realmspace demo</button>
+      <button id="openJsonBtn" type="button">Open JSON</button>
+      <input id="openJsonInput" type="file" accept="application/json,.json" hidden />
+      <button id="saveJsonBtn" type="button">Save JSON</button>
+      <button id="exportSvgBtn" type="button" class="accent">Export SVG</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel left-panel">
+      <section>
+        <div class="section-heading">
+          <h2>System</h2>
+        </div>
+        <label>
+          Name
+          <input id="systemNameInput" type="text" value="Untitled Kosmos" />
+        </label>
+        <label>
+          View radius
+          <span class="inline-field"><input id="viewRadiusInput" type="number" min="1" step="10" value="500" /><span class="unit">units</span></span>
+        </label>
+        <div class="button-row">
+          <button id="fitViewBtn" type="button">Fit bodies</button>
+          <button id="resetViewBtn" type="button">Reset view</button>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <h2>Bodies</h2>
+          <button id="addBodyBtn" type="button" class="icon-button" title="Add orbiting body" aria-label="Add orbiting body">＋</button>
+        </div>
+        <div id="bodyList" class="body-list"></div>
+      </section>
+
+      <section class="help-card">
+        <strong>Map convention</strong>
+        <p>Phase 0° begins straight up, 90° is right, 180° down, 270° left. Drag a body directly along its projected orbit.</p>
+      </section>
+    </aside>
+
+    <section class="stage-wrap" aria-label="Kosmos map canvas">
+      <div class="stage-toolbar">
+        <span id="selectionReadout">No body selected</span>
+        <span class="stage-hint">Click a world to edit it · drag to change phase</span>
+      </div>
+      <svg id="kosmosSvg" viewBox="0 0 1200 800" role="img" aria-label="Interactive Wildspace system map">
+        <defs>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff7c2" />
+            <stop offset="38%" stop-color="#ffd66b" />
+            <stop offset="72%" stop-color="#ff8d42" stop-opacity=".8" />
+            <stop offset="100%" stop-color="#ff6b35" stop-opacity="0" />
+          </radialGradient>
+          <filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <pattern id="starPattern" width="110" height="95" patternUnits="userSpaceOnUse">
+            <circle cx="12" cy="18" r="1" fill="#dce7ff" opacity=".55"/>
+            <circle cx="73" cy="49" r=".8" fill="#ffffff" opacity=".38"/>
+            <circle cx="39" cy="82" r="1.2" fill="#b7c7ff" opacity=".32"/>
+            <circle cx="104" cy="13" r=".7" fill="#ffffff" opacity=".45"/>
+          </pattern>
+        </defs>
+        <rect width="1200" height="800" class="space-bg" />
+        <rect width="1200" height="800" fill="url(#starPattern)" opacity=".55" pointer-events="none" />
+        <g id="orbitLayer"></g>
+        <g id="sunLayer"></g>
+        <g id="bodyLayer"></g>
+        <g id="labelLayer"></g>
+      </svg>
+    </section>
+
+    <aside class="panel inspector-panel">
+      <section id="emptyInspector" class="empty-inspector">
+        <div class="planet-placeholder">◉</div>
+        <h2>Select a body</h2>
+        <p>Its orbit controls will appear here.</p>
+      </section>
+
+      <section id="bodyInspector" hidden>
+        <div class="section-heading">
+          <h2>Body</h2>
+          <button id="deleteBodyBtn" type="button" class="danger ghost">Delete</button>
+        </div>
+
+        <label>Name<input id="bodyNameInput" type="text" /></label>
+        <div class="field-grid two">
+          <label>Symbol size<input id="bodySizeInput" type="number" min="8" max="240" step="1" /></label>
+          <label>Label offset<input id="labelOffsetInput" type="number" min="0" max="160" step="1" /></label>
+        </div>
+
+        <label class="file-label">
+          Body image
+          <span class="file-row">
+            <button id="chooseBodyImageBtn" type="button">Choose image</button>
+            <button id="clearBodyImageBtn" type="button" class="ghost">Clear</button>
+          </span>
+          <input id="bodyImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" hidden />
+        </label>
+
+        <h3>Orbit</h3>
+        <label>Distance / semi-major radius<input id="radiusInput" type="number" min="0.1" step="1" /></label>
+        <label>Phase <span class="field-note">0° ↑ · 90° →</span><input id="phaseInput" type="number" min="0" max="359.999" step="1" /></label>
+        <label>Eccentricity <span class="field-note">0 = circle</span><input id="eccentricityInput" type="number" min="0" max="0.94" step="0.01" /></label>
+        <label>Ellipse rotation<input id="rotationInput" type="number" step="1" /></label>
+        <label>Inclination<input id="inclinationInput" type="number" min="-89" max="89" step="1" /></label>
+        <label>Inclination direction / node<input id="nodeInput" type="number" step="1" /></label>
+
+        <details>
+          <summary>Advanced offset</summary>
+          <p class="field-note block">Shift the complete orbit away from the Sun. This intentionally permits non-Keplerian Spelljammer geometry.</p>
+          <div class="field-grid two">
+            <label>Offset X<input id="offsetXInput" type="number" step="1" /></label>
+            <label>Offset Y<input id="offsetYInput" type="number" step="1" /></label>
+          </div>
+        </details>
+
+        <div class="toggle-grid">
+          <label class="toggle"><input id="showOrbitInput" type="checkbox" /><span>Show orbit</span></label>
+          <label class="toggle"><input id="showLabelInput" type="checkbox" /><span>Show label</span></label>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="statusbar">
+    <span>Kosmos.Kreator v0.1</span>
+    <span id="statusText">Ready.</span>
+  </footer>
+
+  <script src="src/app.js"></script>
+</body>
+</html>
