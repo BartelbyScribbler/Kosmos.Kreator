@@ -1,69 +1,117 @@
 {
-  "schema": "kosmos-kreator/v0.2",
-  "name": "Realmspace",
-  "subtitle": "Crystal Sphere Interior · Wildspace Kosmos",
-  "mapUnits": "million miles",
-  "viewRadius": 3400,
-  "sun": { "name": "Sol", "size": 64 },
-  "shell": {
-    "radius": 3200,
-    "travelDays": 32,
-    "label": "Crystal Shell · 32 days from Sol",
-    "show": true,
-    "showPortals": true
-  },
-  "groups": [
+  "schema": "kosmos-kreator/v0.3",
+  "name": "Realmspace Atlas",
+  "rootSceneId": "realmspace",
+  "scenes": [
     {
-      "id": "inner-realmspace",
-      "name": "Inner Worlds",
-      "collapsed": true,
-      "interactive": true,
-      "anchor": { "radius": 0, "theta": 0, "inclination": 0 },
-      "size": 66,
-      "loreId": "inner-realmspace",
-      "sceneTarget": "realmspace-inner"
-    }
-  ],
-  "portals": [
-    {
-      "id": "mercane-gate",
-      "name": "Mercane Gate",
-      "type": "phlogiston",
-      "theta": 40,
-      "inclination": 28,
-      "size": 24,
-      "labelOffset": 26,
-      "showLabel": true,
-      "loreId": "mercane-gate",
-      "sceneTarget": "outer-mercane-flow"
+      "id": "realmspace",
+      "name": "Realmspace",
+      "subtitle": "Crystal Sphere Interior · Wildspace Kosmos",
+      "parentSceneId": "",
+      "mapUnits": "million miles",
+      "viewRadius": 3400,
+      "center": { "id": "sol", "name": "Sol", "size": 64, "loreId": "sol" },
+      "shell": { "radius": 3200, "travelDays": 32, "label": "Crystal Shell · 32 days from Sol", "show": true, "showPortals": true },
+      "groups": [
+        { "id": "inner-realmspace", "name": "Inner Worlds", "collapsed": true, "interactive": true, "anchor": { "radius": 110, "theta": 315, "inclination": 0 }, "size": 68, "loreId": "inner-realmspace", "interaction": { "type": "expand", "target": "" } }
+      ],
+      "bodies": [
+        { "id": "anadia", "name": "Anadia", "size": 24, "groupId": "inner-realmspace", "loreId": "anadia", "orbit": { "radius": 50, "phase": 10 }, "motion": { "orbitPeriodDays": 0 }, "interaction": { "type": "popup", "target": "" }, "showOrbit": true, "showLabel": true },
+        { "id": "coliar", "name": "Coliar", "size": 29, "groupId": "inner-realmspace", "loreId": "coliar", "orbit": { "radius": 100, "phase": 150, "inclination": 3, "node": 35 }, "motion": { "orbitPeriodDays": 0 }, "interaction": { "type": "popup", "target": "" }, "showOrbit": true, "showLabel": true },
+        { "id": "toril", "name": "Toril", "size": 35, "groupId": "inner-realmspace", "loreId": "toril", "orbit": { "radius": 200, "phase": 265 }, "interaction": { "type": "scene", "target": "toril-neighborhood" }, "showOrbit": true, "showLabel": true },
+        { "id": "karpri", "name": "Karpri", "size": 34, "groupId": "inner-realmspace", "loreId": "karpri", "orbit": { "radius": 300, "phase": 330, "eccentricity": 0.08, "rotation": 20, "inclination": 9, "node": 70 }, "interaction": { "type": "popup", "target": "" }, "showOrbit": true, "showLabel": true },
+        { "id": "chandos", "name": "Chandos", "size": 41, "groupId": "inner-realmspace", "loreId": "chandos", "orbit": { "radius": 400, "phase": 195, "eccentricity": 0.05, "rotation": -12, "inclination": 15, "node": 110 }, "interaction": { "type": "popup", "target": "" }, "showOrbit": true, "showLabel": true },
+        { "id": "glyth", "name": "Glyth", "size": 42, "loreId": "glyth", "orbit": { "radius": 1000, "phase": 315, "eccentricity": 0.1, "rotation": 12, "inclination": 7, "node": 20 }, "interaction": { "type": "popup", "target": "" }, "showOrbit": true, "showLabel": true },
+        { "id": "garden", "name": "Garden", "size": 42, "loreId": "garden", "orbit": { "radius": 1200, "phase": 265, "eccentricity": 0.03, "rotation": 50, "inclination": -6, "node": 150 }, "interaction": { "type": "scene", "target": "garden-neighborhood" }, "showOrbit": true, "showLabel": true },
+        { "id": "hcatha", "name": "H'catha", "size": 38, "loreId": "hcatha", "orbit": { "radius": 1600, "phase": 95, "eccentricity": 0.14, "rotation": -15, "inclination": 18, "node": 40 }, "interaction": { "type": "popup", "target": "" }, "showOrbit": true, "showLabel": true }
+      ],
+      "regions": [],
+      "pois": [],
+      "portals": [
+        { "id": "mercane-gate", "name": "Mercane Gate", "type": "phlogiston", "theta": 40, "inclination": 28, "loreId": "mercane-gate", "interaction": { "type": "popup", "target": "" } },
+        { "id": "deep-gate", "name": "Deep Gate", "type": "phlogiston", "theta": 218, "inclination": -37, "loreId": "deep-gate", "interaction": { "type": "popup", "target": "" } }
+      ]
     },
     {
-      "id": "deep-gate",
-      "name": "Deep Gate",
-      "type": "phlogiston",
-      "theta": 218,
-      "inclination": -37,
-      "size": 24,
-      "labelOffset": 26,
-      "showLabel": true,
-      "loreId": "deep-gate",
-      "sceneTarget": "apeiron-flow"
+      "id": "toril-neighborhood",
+      "name": "Toril Neighborhood",
+      "subtitle": "Toril · Selûne · Tears of Selûne",
+      "parentSceneId": "realmspace",
+      "mapUnits": "local orbital units",
+      "viewRadius": 430,
+      "center": { "id": "toril-center", "name": "Toril", "size": 88, "loreId": "toril", "motion": { "rotationPeriodHours": 24, "rotationPhase": 0, "rotationDirection": 1, "spinSymbol": true } },
+      "shell": { "radius": 0, "travelDays": 0, "label": "", "show": false, "showPortals": false },
+      "groups": [],
+      "bodies": [
+        { "id": "selune", "name": "Selûne", "aliases": ["Leira"], "size": 43, "loreId": "selune", "orbit": { "radius": 220, "phase": 70, "eccentricity": 0.02, "inclination": 5, "node": 12 }, "motion": { "orbitPeriodDays": 30, "orbitDirection": 1, "rotationPeriodHours": 720, "spinSymbol": true }, "interaction": { "type": "scene", "target": "selune-local" }, "showOrbit": true, "showLabel": true }
+      ],
+      "regions": [
+        { "id": "tears-of-selune", "name": "Tears of Selûne", "kind": "asteroid-cluster", "sharedWith": "selune", "phase": 34, "span": 54, "loreId": "tears-of-selune", "interaction": { "type": "scene", "target": "tears-local" }, "showLabel": true }
+      ],
+      "pois": [
+        { "id": "rock-of-bral", "name": "Rock of Bral", "symbol": "⬟", "sharedWith": "selune", "phaseOffset": 46, "loreId": "rock-of-bral", "interaction": { "type": "scene", "target": "rock-of-bral" }, "showLabel": true },
+        { "id": "lucent-edict", "name": "Wreck of the Lucent Edict", "symbol": "✦", "radius": 285, "theta": 146, "inclination": -7, "loreId": "lucent-edict", "interaction": { "type": "popup", "target": "" }, "showLabel": true },
+        { "id": "aperusa-anchorage", "name": "Aperusa Anchorage", "symbol": "⚓", "radius": 330, "theta": 225, "inclination": 12, "loreId": "aperusa-anchorage", "interaction": { "type": "popup", "target": "" }, "showLabel": true }
+      ],
+      "portals": []
+    },
+    {
+      "id": "tears-local",
+      "name": "Tears of Selûne",
+      "subtitle": "Asteroid cluster trailing Selûne",
+      "parentSceneId": "toril-neighborhood",
+      "mapUnits": "cluster units",
+      "viewRadius": 450,
+      "center": { "id": "tears-center", "name": "The Tears", "size": 1, "loreId": "tears-of-selune" },
+      "groups": [], "bodies": [], "portals": [],
+      "regions": [{ "id": "tears-field", "name": "The Tears", "radius": 250, "phase": 0, "span": 300, "loreId": "tears-of-selune", "interaction": { "type": "popup", "target": "" } }],
+      "pois": [
+        { "id": "bral-in-tears", "name": "Rock of Bral", "symbol": "⬟", "radius": 120, "theta": 70, "loreId": "rock-of-bral", "interaction": { "type": "scene", "target": "rock-of-bral" }, "showLabel": true },
+        { "id": "lucent-in-tears", "name": "Wreck of the Lucent Edict", "symbol": "✦", "radius": 210, "theta": 195, "inclination": -4, "loreId": "lucent-edict", "interaction": { "type": "popup", "target": "" }, "showLabel": true },
+        { "id": "aperusa-in-tears", "name": "Aperusa Anchorage", "symbol": "⚓", "radius": 280, "theta": 300, "inclination": 8, "loreId": "aperusa-anchorage", "interaction": { "type": "popup", "target": "" }, "showLabel": true }
+      ]
+    },
+    {
+      "id": "rock-of-bral", "name": "Rock of Bral", "subtitle": "City on an asteroid · local scene placeholder", "parentSceneId": "toril-neighborhood", "mapUnits": "local", "viewRadius": 150,
+      "center": { "id": "bral-center", "name": "Rock of Bral", "size": 78, "loreId": "rock-of-bral" }, "groups": [], "bodies": [], "regions": [], "portals": [],
+      "pois": [
+        { "id": "bral-high-city", "name": "High City", "symbol": "◆", "radius": 62, "theta": 15, "loreId": "bral-high-city", "interaction": { "type": "popup", "target": "" } },
+        { "id": "bral-mid-city", "name": "Middle City", "symbol": "◆", "radius": 66, "theta": 128, "loreId": "bral-mid-city", "interaction": { "type": "popup", "target": "" } },
+        { "id": "bral-low-city", "name": "Lower City", "symbol": "◆", "radius": 72, "theta": 245, "loreId": "bral-low-city", "interaction": { "type": "popup", "target": "" } }
+      ]
+    },
+    {
+      "id": "selune-local", "name": "Selûne", "subtitle": "Locally called Leira · local scene placeholder", "parentSceneId": "toril-neighborhood", "mapUnits": "local", "viewRadius": 140,
+      "center": { "id": "selune-center", "name": "Selûne", "aliases": ["Leira"], "size": 74, "loreId": "selune" }, "groups": [], "bodies": [], "regions": [], "pois": [], "portals": []
+    },
+    {
+      "id": "garden-neighborhood", "name": "Garden & Twelve Moons", "subtitle": "Dense local satellite system", "parentSceneId": "realmspace", "mapUnits": "local orbital units", "viewRadius": 360,
+      "center": { "id": "garden-center", "name": "Garden", "size": 82, "loreId": "garden", "motion": { "rotationPeriodHours": 128, "rotationPhase": 0, "rotationDirection": 1, "spinSymbol": true } },
+      "groups": [], "regions": [], "pois": [], "portals": [],
+      "bodies": [
+        { "id": "garden-grandchild", "name": "Grandchild", "orbit": { "radius": 95, "phase": 0 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-yerthad", "name": "Yerthad", "orbit": { "radius": 113, "phase": 47, "inclination": -4 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-peaceon", "name": "Peaceon", "orbit": { "radius": 131, "phase": 94, "inclination": 4 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-retinae", "name": "Retinae", "orbit": { "radius": 149, "phase": 141, "inclination": 8 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-glorianus", "name": "Glorianus", "orbit": { "radius": 167, "phase": 188, "inclination": -8 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-fjord", "name": "Fjord", "orbit": { "radius": 185, "phase": 235, "inclination": -4 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-locci", "name": "Locci", "orbit": { "radius": 203, "phase": 282, "inclination": 0 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-dragon-rock", "name": "Dragon Rock", "orbit": { "radius": 221, "phase": 329, "inclination": 4 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-knurl", "name": "Knurl", "orbit": { "radius": 239, "phase": 16, "inclination": 8 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-sunson", "name": "Sunson", "orbit": { "radius": 257, "phase": 63, "inclination": -8 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-templar", "name": "Templar", "orbit": { "radius": 275, "phase": 110, "inclination": -4 }, "interaction": { "type": "popup", "target": "" } },
+        { "id": "garden-farworld", "name": "Farworld", "orbit": { "radius": 293, "phase": 157, "inclination": 0 }, "interaction": { "type": "popup", "target": "" } }
+      ]
     }
   ],
-  "bodies": [
-    { "id": "anadia", "name": "Anadia", "size": 24, "groupId": "inner-realmspace", "loreId": "anadia", "showOrbit": true, "showLabel": true, "orbit": { "radius": 50, "phase": 10, "eccentricity": 0, "rotation": 0, "inclination": 0, "node": 0, "offsetX": 0, "offsetY": 0 } },
-    { "id": "coliar", "name": "Coliar", "size": 29, "groupId": "inner-realmspace", "loreId": "coliar", "showOrbit": true, "showLabel": true, "orbit": { "radius": 100, "phase": 150, "eccentricity": 0, "rotation": 0, "inclination": 3, "node": 35, "offsetX": 0, "offsetY": 0 } },
-    { "id": "toril", "name": "Toril", "size": 35, "groupId": "inner-realmspace", "loreId": "toril", "sceneTarget": "toril-local", "showOrbit": true, "showLabel": true, "orbit": { "radius": 200, "phase": 265, "eccentricity": 0, "rotation": 0, "inclination": 0, "node": 0, "offsetX": 0, "offsetY": 0 } },
-    { "id": "karpri", "name": "Karpri", "size": 34, "groupId": "inner-realmspace", "loreId": "karpri", "showOrbit": true, "showLabel": true, "orbit": { "radius": 300, "phase": 330, "eccentricity": 0.08, "rotation": 20, "inclination": 9, "node": 70, "offsetX": 0, "offsetY": 0 } },
-    { "id": "chandos", "name": "Chandos", "size": 41, "groupId": "inner-realmspace", "loreId": "chandos", "showOrbit": true, "showLabel": true, "orbit": { "radius": 400, "phase": 195, "eccentricity": 0.05, "rotation": 348, "inclination": 15, "node": 110, "offsetX": 0, "offsetY": 0 } },
-    { "id": "glyth", "name": "Glyth", "size": 42, "loreId": "glyth", "showOrbit": true, "showLabel": true, "orbit": { "radius": 1000, "phase": 315, "eccentricity": 0.1, "rotation": 12, "inclination": 7, "node": 20, "offsetX": 0, "offsetY": 0 } },
-    { "id": "garden", "name": "Garden", "size": 42, "loreId": "garden", "showOrbit": true, "showLabel": true, "orbit": { "radius": 1200, "phase": 265, "eccentricity": 0.03, "rotation": 50, "inclination": -6, "node": 150, "offsetX": 0, "offsetY": 0 } },
-    { "id": "hcatha", "name": "H'catha", "size": 38, "loreId": "hcatha", "showOrbit": true, "showLabel": true, "orbit": { "radius": 1600, "phase": 95, "eccentricity": 0.14, "rotation": 345, "inclination": 18, "node": 40, "offsetX": 0, "offsetY": 0 } }
-  ],
   "lore": {
-    "inner-realmspace": { "name": "Inner Worlds", "summary": "A cartographic group for the close-packed inner worlds. Expand it to reveal their true orbits." },
-    "toril": { "name": "Toril", "summary": "Primary world of Realmspace. Attach a richer lore JSON to replace this demo entry." },
-    "mercane-gate": { "name": "Mercane Gate", "summary": "A shell portal positioned above the normal orbital plane." },
-    "deep-gate": { "name": "Deep Gate", "summary": "A lower-hemisphere passage through the Crystal Shell." }
-  }
+    "toril": { "name": "Toril", "summary": "Primary world of the Toril neighborhood." },
+    "selune": { "name": "Selûne", "aliases": ["Leira"], "summary": "Toril's moon. Leira is preserved as an alias." },
+    "tears-of-selune": { "name": "Tears of Selûne", "summary": "Asteroid cluster in Toril's local celestial neighborhood." },
+    "rock-of-bral": { "name": "Rock of Bral", "summary": "Major spelljamming city and direct scene destination." },
+    "lucent-edict": { "name": "Wreck of the Lucent Edict", "summary": "Minor point of interest represented by a popup." },
+    "aperusa-anchorage": { "name": "Aperusa Anchorage", "summary": "Small anchorage represented by a popup." },
+    "garden": { "name": "Garden", "summary": "A clustered liveworld with twelve moons." }
+  },
+  "exportProfile": { "htmlStartPlaying": false }
 }
