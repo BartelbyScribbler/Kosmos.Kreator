@@ -1,0 +1,10 @@
+{
+  "lore": {
+    "toril": { "name": "Toril", "summary": "Primary inhabited world of its local neighborhood.", "tags": ["planet", "realmspace"] },
+    "selune": { "name": "Selûne", "aliases": ["Leira"], "summary": "Toril's moon. The alias field lets search and lore preserve alternate names without replacing the atlas label.", "tags": ["moon", "toril"] },
+    "tears-of-selune": { "name": "Tears of Selûne", "summary": "A cluster-scale region. Entering it is optional because major children such as Bral can also be direct scene links.", "tags": ["asteroid-cluster", "toril"] },
+    "rock-of-bral": { "name": "Rock of Bral", "summary": "A major destination that opens its own scene rather than a popup.", "tags": ["city", "asteroid", "spelljammer"] },
+    "lucent-edict": { "name": "Wreck of the Lucent Edict", "summary": "A small feature that stays at popup scale.", "tags": ["wreck", "poi"] },
+    "aperusa-anchorage": { "name": "Aperusa Anchorage", "summary": "A small anchorage that stays at popup scale until it merits a dedicated scene.", "tags": ["anchorage", "poi"] }
+  }
+}
