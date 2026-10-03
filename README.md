@@ -1,75 +1,101 @@
 # Kosmos.Kreator
 
-A browser-based Wildspace / Crystal Sphere interior cartographer for Spelljammer-style cosmologies.
+A lightweight, no-build Spelljammer atlas editor for Wildspace systems, Crystal Spheres, local celestial neighborhoods, shell portals, lore popups, and drill-down scenes.
 
-The app is intentionally static and dependency-free: open `index.html`, or use the GitHub Pages deployment.
+## v0.3 — Atlas Scenes
 
-## v0.2
+The editor now separates **cosmology**, **presentation**, and **interaction**. A body can remain at its true orbital coordinates while its group is collapsed for a particular map scale. A major object can open another scene, while a minor wreck or anchorage can simply open lore.
 
-Kosmos.Kreator now separates **cosmology**, **cartographic presentation**, and **interactive atlas behavior**.
+Current features include:
 
-- 3D orbital geometry projected into a 2D SVG map
-- Semi-major radius, phase, eccentricity, ellipse rotation, inclination, node, and free orbit offset
-- Crystal Shell radius, travel-distance label, and show/hide controls
-- Shell portals positioned by **theta plus inclination**, so gates can live above or below the normal orbital plane
-- Collapsible map groups for keeping inner systems readable at outer-system scale
-- Static SVG export preserves the current collapsed/expanded state
-- Interactive HTML export starts from the current map state and lets readers unfold clickable groups
-- Bodies, groups, and portals can carry `loreId` and `sceneTarget` hooks for a larger nested atlas
-- External lore JSON can be loaded and merged into the current Kosmos
-- v0.1 JSON remains loadable and is upgraded in memory to the v0.2 schema
+- multi-scene atlases with stable scene IDs
+- browser back/deep links using `#scene=<id>`
+- breadcrumb navigation
+- scene links that replace the canvas instead of stacking popups
+- lore popups for minor points of interest
+- bodies, regions/clusters, points of interest, collapsible map groups, and shell portals
+- Crystal Shell radius, travel-day label, visibility toggle, and **Fit shell**
+- shell portals positioned by θ plus inclination / shell latitude
+- front- and rear-hemisphere portal styling
+- parent/local scene relationships without requiring strict click-through containment
+- alias fields, demonstrated with `Selûne` and alias `Leira`
+- shared-orbit regions and POIs, used by the Tears of Selûne and Rock of Bral
+- a Toril neighborhood demo where Bral is directly clickable without first entering the Tears
+- a Garden local scene containing its twelve moons
+- simulation clock with revolution periods and rotation periods
+- draggable animated bodies; dragging rewrites epoch phase rather than corrupting current simulation time
+- static SVG snapshots at the current animation instant
+- self-contained interactive HTML export with scenes, breadcrumbs, popups, collapsed groups, and animation
+- v0.1/v0.2 JSON upgrade into a one-scene v0.3 atlas
+- separate lore JSON loading
 
-## Coordinate conventions
+No framework, package install, server, or build step is required.
 
-### Orbits
+## Run it
 
-- `phase = 0°` points straight up on the map before orbit transforms
-- `90°` points right
-- `180°` points down
-- `270°` points left
-- `inclination` tilts the orbital plane
-- `node` controls the direction of that tilt
+The published editor is available through GitHub Pages. For local development, serve the repository root:
 
-### Crystal Shell portals
+```bash
+python -m http.server 8000
+```
 
-A portal is a point on a sphere, not an orbit.
+Then open `http://localhost:8000`.
 
-- `theta` is longitude around the normal orbital plane using the same map convention
-- `inclination = 0°` lies on the normal orbital plane / visible shell rim
-- positive inclination lies on the upper hemisphere
-- negative inclination lies on the lower hemisphere
-- `+90°` and `-90°` are the poles
+## Scene model
 
-The top-down projection naturally moves high-inclination portals inward from the rim. Lower-hemisphere portals render faded/dashed so the map still communicates depth.
+A v0.3 file is an atlas containing scenes:
 
-## Map groups
+```json
+{
+  "schema": "kosmos-kreator/v0.3",
+  "name": "Realmspace Atlas",
+  "rootSceneId": "realmspace",
+  "scenes": [
+    {
+      "id": "toril-neighborhood",
+      "name": "Toril Neighborhood",
+      "parentSceneId": "realmspace",
+      "center": { "name": "Toril" },
+      "bodies": [],
+      "regions": [],
+      "pois": [],
+      "groups": [],
+      "portals": []
+    }
+  ]
+}
+```
 
-Bodies may reference a `groupId`. A group owns only presentation state; it does **not** change the bodies' real orbital coordinates.
+Interactive objects use a simple action contract:
 
-When a group is collapsed, member bodies and their orbit lines are hidden and replaced by one marker at the group's configured anchor. Expanding restores the true geometry.
+```json
+{ "interaction": { "type": "scene", "target": "rock-of-bral" } }
+```
 
-This is useful for cases such as Realmspace, where the inner planets can collapse to one central marker so the map can retain a sane scale for Glyth, Garden, H'catha, and the Crystal Shell.
+or:
 
-## Lore and nested atlas hooks
+```json
+{ "interaction": { "type": "popup", "target": "" }, "loreId": "lucent-edict" }
+```
 
-Load a lore JSON file with **Load lore**. Kosmos.Kreator accepts:
+Containment does not force navigation. The Rock of Bral may be visually located inside the Tears of Selûne while remaining a direct scene destination from the Toril neighborhood.
 
-- a keyed object
-- `{ "lore": { ... } }`
-- an `entries` array
-- a `locations` array
+## Motion
 
-Bodies, groups, and portals can reference entries with `loreId` and can point toward another map/scene or URL with `sceneTarget`.
+Bodies may store revolution and rotation periods:
 
-The interactive HTML exporter already uses lore entries for popups and preserves `sceneTarget` values. A future atlas router can use those targets to move between a flow map, a Kosmos scene, a planetary neighborhood, and deeper location maps without changing the underlying Kosmos files.
+```json
+{
+  "motion": {
+    "orbitPeriodDays": 30,
+    "orbitDirection": 1,
+    "rotationPeriodHours": 720,
+    "rotationDirection": 1,
+    "spinSymbol": true
+  }
+}
+```
 
-## Realmspace demo
+A zero period means “do not animate until a period is supplied.” This is deliberate for bodies whose canon period has not yet been entered. Garden’s twelve moons are therefore a geometry/density test rather than an assertion of invented orbital periods.
 
-The built-in Realmspace example demonstrates:
-
-- a 32-day Crystal Shell at radius 3200
-- H'catha at radius 1600, corresponding to the 16-day reference scale
-- an initially collapsed Inner Worlds group
-- one upper-hemisphere and one lower-hemisphere Phlogiston portal
-
-`examples/realmspace.json` contains the same structure as editable data.
+The current globe-like rotation display is only a symbol/spin preview. A true textured rotating-world scene with latitude/longitude hotspots is intended as a later scene type.
