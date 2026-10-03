@@ -3,186 +3,220 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#090b16" />
+  <meta name="theme-color" content="#080b17" />
   <title>Kosmos.Kreator</title>
   <link rel="stylesheet" href="styles/kosmos.css" />
 </head>
 <body>
   <header class="app-header">
     <div>
-      <p class="eyebrow">WILDSPACE SYSTEM CARTOGRAPHER</p>
+      <p class="eyebrow">SPELLJAMMER ATLAS AUTHORING TOOL</p>
       <h1>Kosmos.Kreator</h1>
     </div>
     <div class="toolbar" aria-label="File and export controls">
       <button id="newSystemBtn" type="button">New</button>
-      <button id="loadRealmspaceBtn" type="button">Realmspace demo</button>
-      <button id="openJsonBtn" type="button">Open Kosmos</button>
+      <button id="loadRealmspaceBtn" type="button">Realmspace atlas</button>
+      <button id="openJsonBtn" type="button">Open JSON</button>
       <input id="openJsonInput" type="file" accept="application/json,.json" hidden />
-      <button id="openLoreBtn" type="button">Load lore</button>
-      <input id="openLoreInput" type="file" accept="application/json,.json" hidden />
+      <button id="loadLoreBtn" type="button">Load lore</button>
+      <input id="loadLoreInput" type="file" accept="application/json,.json" hidden />
       <button id="saveJsonBtn" type="button">Save JSON</button>
-      <button id="exportSvgBtn" type="button">Export SVG</button>
-      <button id="exportHtmlBtn" type="button" class="accent">Export interactive HTML</button>
+      <button id="exportSvgBtn" type="button">Snapshot SVG</button>
+      <button id="exportHtmlBtn" type="button" class="accent">Interactive HTML</button>
     </div>
   </header>
 
   <main class="workspace">
     <aside class="panel left-panel">
       <section>
-        <div class="section-heading"><h2>Kosmos</h2></div>
-        <label>Name<input id="systemNameInput" type="text" /></label>
-        <label>Subtitle<input id="systemSubtitleInput" type="text" placeholder="Crystal Sphere Interior · Realmspace" /></label>
+        <div class="section-heading"><h2>Atlas</h2></div>
+        <label>Atlas name<input id="systemNameInput" type="text" /></label>
+        <label>Scene
+          <select id="sceneSelect"></select>
+        </label>
+        <div class="button-row">
+          <button id="addSceneBtn" type="button">＋ Scene</button>
+          <button id="deleteSceneBtn" type="button" class="danger ghost">Delete</button>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading"><h2>Current scene</h2></div>
+        <label>Name<input id="sceneNameInput" type="text" /></label>
+        <label>Subtitle<input id="sceneSubtitleInput" type="text" /></label>
         <div class="field-grid two">
           <label>View radius<input id="viewRadiusInput" type="number" min="1" step="10" /></label>
-          <label>Map units<input id="mapUnitsInput" type="text" placeholder="million miles" /></label>
+          <label>Units<input id="mapUnitsInput" type="text" /></label>
         </div>
+        <label>Center name<input id="centerNameInput" type="text" /></label>
         <div class="button-row">
-          <button id="fitViewBtn" type="button">Fit bodies</button>
+          <button id="fitViewBtn" type="button">Fit objects</button>
           <button id="fitShellBtn" type="button">Fit shell</button>
         </div>
       </section>
 
       <section>
-        <div class="section-heading"><h2>Crystal Shell</h2></div>
-        <div class="field-grid two">
-          <label>Radius<input id="shellRadiusInput" type="number" min="1" step="10" /></label>
-          <label>Travel days<input id="shellTravelDaysInput" type="number" min="0" step="0.5" /></label>
-        </div>
-        <label>Shell label<input id="shellLabelInput" type="text" /></label>
-        <div class="toggle-grid">
-          <label class="toggle"><input id="showShellInput" type="checkbox" /><span>Show shell</span></label>
-          <label class="toggle"><input id="showPortalsInput" type="checkbox" /><span>Show portals</span></label>
-        </div>
+        <details open>
+          <summary>Crystal Shell</summary>
+          <div class="field-grid two">
+            <label>Radius<input id="shellRadiusInput" type="number" min="1" step="10" /></label>
+            <label>Travel days<input id="shellTravelDaysInput" type="number" min="0" step="0.5" /></label>
+          </div>
+          <label>Label<input id="shellLabelInput" type="text" /></label>
+          <div class="toggle-grid">
+            <label class="toggle"><input id="showShellInput" type="checkbox" /><span>Show shell</span></label>
+            <label class="toggle"><input id="showPortalsInput" type="checkbox" /><span>Show portals</span></label>
+          </div>
+        </details>
       </section>
 
       <section>
-        <div class="section-heading">
-          <h2>Groups</h2>
-          <button id="addGroupBtn" type="button" class="icon-button" title="Add map group" aria-label="Add map group">＋</button>
-        </div>
+        <div class="section-heading"><h2>Map groups</h2><button id="addGroupBtn" class="icon-button" type="button">＋</button></div>
         <div id="groupList" class="object-list"></div>
       </section>
-
       <section>
-        <div class="section-heading">
-          <h2>Bodies</h2>
-          <button id="addBodyBtn" type="button" class="icon-button" title="Add orbiting body" aria-label="Add orbiting body">＋</button>
-        </div>
+        <div class="section-heading"><h2>Bodies</h2><button id="addBodyBtn" class="icon-button" type="button">＋</button></div>
         <div id="bodyList" class="object-list"></div>
       </section>
-
       <section>
-        <div class="section-heading">
-          <h2>Shell portals</h2>
-          <button id="addPortalBtn" type="button" class="icon-button" title="Add shell portal" aria-label="Add shell portal">＋</button>
-        </div>
+        <div class="section-heading"><h2>Regions</h2><button id="addRegionBtn" class="icon-button" type="button">＋</button></div>
+        <div id="regionList" class="object-list"></div>
+      </section>
+      <section>
+        <div class="section-heading"><h2>Points of interest</h2><button id="addPoiBtn" class="icon-button" type="button">＋</button></div>
+        <div id="poiList" class="object-list"></div>
+      </section>
+      <section>
+        <div class="section-heading"><h2>Shell portals</h2><button id="addPortalBtn" class="icon-button" type="button">＋</button></div>
         <div id="portalList" class="object-list"></div>
       </section>
 
       <section class="help-card">
         <strong>Map convention</strong>
-        <p>θ 0° begins straight up, 90° is right, 180° down, 270° left. Portal inclination is latitude on the spherical shell: 0° at the normal orbital plane, +90° / −90° at the poles.</p>
+        <p>0° is up, 90° right, 180° down, 270° left. Portal inclination is shell latitude. Double-click a scene-linked object to follow it while editing.</p>
       </section>
     </aside>
 
     <section class="stage-wrap" aria-label="Kosmos map canvas">
-      <div class="stage-toolbar">
+      <div class="stage-toolbar scene-bar">
+        <nav id="breadcrumbs" class="breadcrumbs" aria-label="Scene breadcrumbs"></nav>
         <span id="selectionReadout">No object selected</span>
-        <span class="stage-hint">Click worlds to edit · click group markers to fold/unfold</span>
       </div>
-      <svg id="kosmosSvg" viewBox="0 0 1200 800" role="img" aria-label="Interactive Wildspace system map">
+      <div class="stage-toolbar time-bar">
+        <div class="time-controls">
+          <button id="stepBackBtn" type="button" title="Back one day">−1d</button>
+          <button id="playBtn" type="button">▶ Play</button>
+          <button id="stepForwardBtn" type="button" title="Forward one day">+1d</button>
+          <label class="compact-label">Speed
+            <select id="speedSelect">
+              <option value="0.1">0.1 day/s</option>
+              <option value="1" selected>1 day/s</option>
+              <option value="10">10 days/s</option>
+              <option value="100">100 days/s</option>
+            </select>
+          </label>
+          <button id="zeroTimeBtn" type="button" class="ghost">Epoch</button>
+        </div>
+        <span id="timeReadout">T +0.00 days</span>
+      </div>
+
+      <svg id="kosmosSvg" viewBox="0 0 1200 800" role="img" aria-label="Interactive Wildspace atlas scene">
         <defs>
-          <style>
-            .space-bg{fill:#03050d}.orbit-path{fill:none;stroke:#8a91b1;stroke-width:1.2;opacity:.48;vector-effect:non-scaling-stroke}.orbit-path.selected{stroke:#b79cff;stroke-width:2;opacity:.92}.body-hit{fill:transparent}.body-fallback{fill:#7682b2;stroke:#dbe3ff;stroke-width:2}.body-selected-ring{fill:none;stroke:#7de4ff;stroke-width:2;stroke-dasharray:3 4}.body-label,.portal-label,.group-label,.shell-label,.kosmos-title,.kosmos-subtitle{font-family:system-ui,sans-serif;paint-order:stroke;stroke:#03050d;stroke-linejoin:round}.body-label{fill:#eef2ff;font-size:16px;text-anchor:middle;stroke-width:5px}.sun-core{fill:#ffd266;stroke:#fff2b3;stroke-width:2}.sun-label{fill:#fff2c7;font:700 17px system-ui,sans-serif;text-anchor:middle}.shell-path{fill:none;stroke:#76bdd2;stroke-width:2;opacity:.6;stroke-dasharray:7 7}.shell-label{fill:#9edff0;font-size:14px;text-anchor:middle;stroke-width:4px}.portal-marker{stroke:#e8fbff;stroke-width:2}.portal-marker.back{opacity:.45;stroke-dasharray:3 2}.portal-label{fill:#c9f6ff;font-size:13px;text-anchor:middle;stroke-width:4px}.group-marker{fill:#1e2e4b;stroke:#a9c7ff;stroke-width:2}.group-marker.expanded{fill:#11182a;stroke-dasharray:4 3}.group-label{fill:#eaf2ff;font-size:14px;text-anchor:middle;stroke-width:4px}.kosmos-title{fill:#f1f4ff;font-size:28px;font-weight:800;stroke-width:6px}.kosmos-subtitle{fill:#aebbe3;font-size:14px;stroke-width:4px}
+          <style id="svgEmbeddedStyle">
+            .space-bg{fill:#03050d}.shell-line{fill:none;stroke:#87bbd1;stroke-width:2;stroke-dasharray:8 8;opacity:.55}.shell-label{fill:#a9d7e9;font:700 15px system-ui,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#03050d;stroke-width:5px}.orbit-path{fill:none;stroke:#8a91b1;stroke-width:1.2;opacity:.48;vector-effect:non-scaling-stroke}.orbit-path.selected{stroke:#b79cff;stroke-width:2;opacity:.92}.region-path{fill:none;stroke:#d5b36a;stroke-width:16;opacity:.17;stroke-linecap:round}.region-path.selected{stroke:#ffd98b;opacity:.35}.body-hit,.feature-hit{fill:transparent}.body-fallback{fill:#7682b2;stroke:#dbe3ff;stroke-width:2}.center-core{fill:#ffd266;stroke:#fff2b3;stroke-width:2}.body-selected-ring{fill:none;stroke:#7de4ff;stroke-width:2;stroke-dasharray:3 4}.body-label,.feature-label{fill:#eef2ff;font:16px system-ui,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#03050d;stroke-width:5px;stroke-linejoin:round}.center-label{fill:#fff2c7;font:700 17px system-ui,sans-serif;text-anchor:middle}.portal-front{fill:#65e3ff;stroke:#d9f8ff;stroke-width:2}.portal-back{fill:#436b83;stroke:#9bc7d8;stroke-width:2;stroke-dasharray:3 3;opacity:.65}.poi-symbol{fill:#f0c674;stroke:#fff1bd;stroke-width:2}.group-symbol{fill:#342a58;stroke:#c9b7ff;stroke-width:2}.scene-title{fill:#eef2ff;font:700 28px system-ui,sans-serif}.scene-subtitle{fill:#9fa8c9;font:14px system-ui,sans-serif}.spin-mark{stroke:#eef2ff;stroke-width:1.5;opacity:.7}
           </style>
-          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#fff7c2" />
-            <stop offset="38%" stop-color="#ffd66b" />
-            <stop offset="72%" stop-color="#ff8d42" stop-opacity=".8" />
-            <stop offset="100%" stop-color="#ff6b35" stop-opacity="0" />
+          <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff7c2"/><stop offset="38%" stop-color="#ffd66b"/><stop offset="72%" stop-color="#ff8d42" stop-opacity=".8"/><stop offset="100%" stop-color="#ff6b35" stop-opacity="0"/>
           </radialGradient>
-          <filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <pattern id="starPattern" width="110" height="95" patternUnits="userSpaceOnUse">
-            <circle cx="12" cy="18" r="1" fill="#dce7ff" opacity=".55"/>
-            <circle cx="73" cy="49" r=".8" fill="#ffffff" opacity=".38"/>
-            <circle cx="39" cy="82" r="1.2" fill="#b7c7ff" opacity=".32"/>
-            <circle cx="104" cy="13" r=".7" fill="#ffffff" opacity=".45"/>
-          </pattern>
+          <filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <pattern id="starPattern" width="110" height="95" patternUnits="userSpaceOnUse"><circle cx="12" cy="18" r="1" fill="#dce7ff" opacity=".55"/><circle cx="73" cy="49" r=".8" fill="#fff" opacity=".38"/><circle cx="39" cy="82" r="1.2" fill="#b7c7ff" opacity=".32"/><circle cx="104" cy="13" r=".7" fill="#fff" opacity=".45"/></pattern>
         </defs>
-        <rect width="1200" height="800" class="space-bg" />
-        <rect width="1200" height="800" fill="url(#starPattern)" opacity=".55" pointer-events="none" />
-        <g id="titleLayer"></g>
-        <g id="shellLayer"></g>
-        <g id="orbitLayer"></g>
-        <g id="sunLayer"></g>
-        <g id="bodyLayer"></g>
-        <g id="groupLayer"></g>
-        <g id="portalLayer"></g>
-        <g id="labelLayer"></g>
+        <rect width="1200" height="800" class="space-bg"/>
+        <rect width="1200" height="800" fill="url(#starPattern)" opacity=".55" pointer-events="none"/>
+        <g id="shellLayer"></g><g id="regionLayer"></g><g id="orbitLayer"></g><g id="centerLayer"></g><g id="groupLayer"></g><g id="bodyLayer"></g><g id="poiLayer"></g><g id="portalLayer"></g><g id="labelLayer"></g><g id="titleLayer"></g>
       </svg>
     </section>
 
     <aside class="panel inspector-panel">
-      <section id="emptyInspector" class="empty-inspector">
-        <div class="planet-placeholder">◉</div>
-        <h2>Select an object</h2>
-        <p>World, group, and portal controls appear here.</p>
-      </section>
+      <section id="emptyInspector" class="empty-inspector"><div class="planet-placeholder">◎</div><h2>Select an object</h2><p>Its controls will appear here.</p></section>
 
       <section id="bodyInspector" hidden>
         <div class="section-heading"><h2>Body</h2><button id="deleteBodyBtn" type="button" class="danger ghost">Delete</button></div>
         <label>Name<input id="bodyNameInput" type="text" /></label>
-        <div class="field-grid two">
-          <label>Symbol size<input id="bodySizeInput" type="number" min="8" max="240" step="1" /></label>
-          <label>Label offset<input id="labelOffsetInput" type="number" min="0" max="160" step="1" /></label>
-        </div>
-        <label>Map group<select id="bodyGroupInput"></select></label>
-        <label class="file-label">Body image<span class="file-row"><button id="chooseBodyImageBtn" type="button">Choose image</button><button id="clearBodyImageBtn" type="button" class="ghost">Clear</button></span><input id="bodyImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" hidden /></label>
+        <label>Aliases <span class="field-note">comma separated</span><input id="bodyAliasesInput" type="text" /></label>
+        <div class="field-grid two"><label>Symbol size<input id="bodySizeInput" type="number" min="8" max="240" step="1" /></label><label>Label offset<input id="bodyLabelOffsetInput" type="number" min="0" max="160" step="1" /></label></div>
+        <label>Map group<select id="bodyGroupSelect"></select></label>
+        <label class="file-label">Body image<span class="file-row"><button id="chooseBodyImageBtn" type="button">Choose</button><button id="clearBodyImageBtn" type="button" class="ghost">Clear</button></span><input id="bodyImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" hidden /></label>
         <h3>Orbit</h3>
-        <label>Distance / semi-major radius<input id="radiusInput" type="number" min="0.1" step="1" /></label>
-        <label>Phase <span class="field-note">0° ↑ · 90° →</span><input id="phaseInput" type="number" min="0" max="359.999" step="1" /></label>
-        <label>Eccentricity <span class="field-note">0 = circle</span><input id="eccentricityInput" type="number" min="0" max="0.94" step="0.01" /></label>
+        <label>Distance / semi-major radius<input id="radiusInput" type="number" min="0" step="1" /></label>
+        <label>Phase <span class="field-note">at epoch</span><input id="phaseInput" type="number" step="1" /></label>
+        <label>Eccentricity<input id="eccentricityInput" type="number" min="0" max="0.94" step="0.01" /></label>
         <label>Ellipse rotation<input id="rotationInput" type="number" step="1" /></label>
         <label>Inclination<input id="inclinationInput" type="number" min="-89" max="89" step="1" /></label>
         <label>Inclination direction / node<input id="nodeInput" type="number" step="1" /></label>
-        <details><summary>Advanced offset</summary><p class="field-note block">Shift the complete orbit away from the Sun. This intentionally permits non-Keplerian Spelljammer geometry.</p><div class="field-grid two"><label>Offset X<input id="offsetXInput" type="number" step="1" /></label><label>Offset Y<input id="offsetYInput" type="number" step="1" /></label></div></details>
-        <h3>Atlas interaction</h3>
-        <label>Lore ID<input id="bodyLoreIdInput" type="text" placeholder="toril" /></label>
-        <label>Scene / URL target<input id="bodySceneTargetInput" type="text" placeholder="toril-local or https://…" /></label>
-        <div class="toggle-grid"><label class="toggle"><input id="showOrbitInput" type="checkbox" /><span>Show orbit</span></label><label class="toggle"><input id="showLabelInput" type="checkbox" /><span>Show label</span></label></div>
+        <details><summary>Advanced orbit</summary><div class="field-grid two"><label>Offset X<input id="offsetXInput" type="number" step="1" /></label><label>Offset Y<input id="offsetYInput" type="number" step="1" /></label></div></details>
+        <h3>Motion</h3>
+        <div class="field-grid two"><label>Revolution days<input id="orbitPeriodInput" type="number" min="0" step="0.01" /></label><label>Rotation hours<input id="rotationPeriodInput" type="number" step="0.01" /></label></div>
+        <div class="toggle-grid"><label class="toggle"><input id="orbitRetrogradeInput" type="checkbox"/><span>Retrograde orbit</span></label><label class="toggle"><input id="spinRetrogradeInput" type="checkbox"/><span>Retrograde spin</span></label></div>
+        <h3>Interaction</h3>
+        <label>Click action<select id="bodyInteractionInput"><option value="popup">Lore popup</option><option value="scene">Open scene</option><option value="none">None</option></select></label>
+        <label>Target scene<select id="bodySceneTargetInput"></select></label>
+        <label>Lore ID<input id="bodyLoreIdInput" type="text" /></label>
+        <button id="openBodySceneBtn" type="button" class="accent scene-open" hidden>Open linked scene ↗</button>
+        <div class="toggle-grid"><label class="toggle"><input id="showOrbitInput" type="checkbox"/><span>Show orbit</span></label><label class="toggle"><input id="showBodyLabelInput" type="checkbox"/><span>Show label</span></label></div>
       </section>
 
       <section id="groupInspector" hidden>
         <div class="section-heading"><h2>Map group</h2><button id="deleteGroupBtn" type="button" class="danger ghost">Delete</button></div>
         <label>Name<input id="groupNameInput" type="text" /></label>
-        <p id="groupMemberReadout" class="field-note block"></p>
-        <div class="toggle-grid"><label class="toggle"><input id="groupCollapsedInput" type="checkbox" /><span>Collapsed now</span></label><label class="toggle"><input id="groupInteractiveInput" type="checkbox" /><span>Clickable in HTML</span></label></div>
-        <h3>Collapsed marker</h3>
-        <div class="field-grid two"><label>Anchor radius<input id="groupRadiusInput" type="number" min="0" step="1" /></label><label>θ<input id="groupThetaInput" type="number" step="1" /></label></div>
-        <div class="field-grid two"><label>Inclination<input id="groupInclinationInput" type="number" min="-90" max="90" step="1" /></label><label>Marker size<input id="groupSizeInput" type="number" min="20" max="180" step="1" /></label></div>
-        <h3>Atlas interaction</h3>
-        <label>Lore ID<input id="groupLoreIdInput" type="text" /></label>
-        <label>Scene / URL target<input id="groupSceneTargetInput" type="text" /></label>
+        <div class="field-grid two"><label>Anchor radius<input id="groupRadiusInput" type="number" step="1"/></label><label>Anchor θ<input id="groupThetaInput" type="number" step="1"/></label></div>
+        <label>Anchor inclination<input id="groupInclinationInput" type="number" min="-90" max="90" step="1"/></label>
+        <div class="toggle-grid"><label class="toggle"><input id="groupCollapsedInput" type="checkbox"/><span>Collapsed</span></label><label class="toggle"><input id="groupInteractiveInput" type="checkbox"/><span>Interactive</span></label></div>
+        <label>Collapsed click<select id="groupInteractionInput"><option value="expand">Expand group</option><option value="popup">Lore popup</option><option value="scene">Open scene</option><option value="none">None</option></select></label>
+        <label>Target scene<select id="groupSceneTargetInput"></select></label>
+        <label>Lore ID<input id="groupLoreIdInput" type="text"/></label>
+        <button id="openGroupSceneBtn" type="button" class="accent scene-open" hidden>Open linked scene ↗</button>
+      </section>
+
+      <section id="regionInspector" hidden>
+        <div class="section-heading"><h2>Region / cluster</h2><button id="deleteRegionBtn" type="button" class="danger ghost">Delete</button></div>
+        <label>Name<input id="regionNameInput" type="text" /></label>
+        <label>Shared orbit with<select id="regionSharedWithInput"></select></label>
+        <div class="field-grid two"><label>Radius<input id="regionRadiusInput" type="number" min="0" step="1"/></label><label>Phase offset<input id="regionPhaseInput" type="number" step="1"/></label></div>
+        <div class="field-grid two"><label>Arc span °<input id="regionSpanInput" type="number" min="1" max="360" step="1"/></label><label>Inclination<input id="regionInclinationInput" type="number" min="-89" max="89" step="1"/></label></div>
+        <label>Click action<select id="regionInteractionInput"><option value="popup">Lore popup</option><option value="scene">Open scene</option><option value="none">None</option></select></label>
+        <label>Target scene<select id="regionSceneTargetInput"></select></label>
+        <label>Lore ID<input id="regionLoreIdInput" type="text"/></label>
+        <button id="openRegionSceneBtn" type="button" class="accent scene-open" hidden>Open linked scene ↗</button>
+      </section>
+
+      <section id="poiInspector" hidden>
+        <div class="section-heading"><h2>Point of interest</h2><button id="deletePoiBtn" type="button" class="danger ghost">Delete</button></div>
+        <label>Name<input id="poiNameInput" type="text" /></label>
+        <label>Attached orbit<select id="poiSharedWithInput"></select></label>
+        <div class="field-grid two"><label>Radius<input id="poiRadiusInput" type="number" min="0" step="1"/></label><label>θ / phase<input id="poiThetaInput" type="number" step="1"/></label></div>
+        <label>Inclination<input id="poiInclinationInput" type="number" min="-90" max="90" step="1"/></label>
+        <label>Symbol<input id="poiSymbolInput" type="text" maxlength="3"/></label>
+        <label>Click action<select id="poiInteractionInput"><option value="popup">Lore popup</option><option value="scene">Open scene</option><option value="none">None</option></select></label>
+        <label>Target scene<select id="poiSceneTargetInput"></select></label>
+        <label>Lore ID<input id="poiLoreIdInput" type="text"/></label>
+        <button id="openPoiSceneBtn" type="button" class="accent scene-open" hidden>Open linked scene ↗</button>
       </section>
 
       <section id="portalInspector" hidden>
         <div class="section-heading"><h2>Shell portal</h2><button id="deletePortalBtn" type="button" class="danger ghost">Delete</button></div>
-        <label>Name<input id="portalNameInput" type="text" /></label>
-        <label>Type<select id="portalTypeInput"><option value="phlogiston">Phlogiston</option><option value="astral">Astral</option><option value="custom">Custom</option></select></label>
-        <div class="field-grid two"><label>θ <span class="field-note">around shell</span><input id="portalThetaInput" type="number" step="1" /></label><label>Inclination <span class="field-note">shell latitude</span><input id="portalInclinationInput" type="number" min="-90" max="90" step="1" /></label></div>
-        <div class="field-grid two"><label>Marker size<input id="portalSizeInput" type="number" min="8" max="100" step="1" /></label><label>Label offset<input id="portalLabelOffsetInput" type="number" min="0" max="120" step="1" /></label></div>
-        <h3>Atlas interaction</h3>
-        <label>Lore ID<input id="portalLoreIdInput" type="text" /></label>
-        <label>Scene / URL target<input id="portalSceneTargetInput" type="text" /></label>
-        <label class="toggle"><input id="portalShowLabelInput" type="checkbox" /><span>Show label</span></label>
+        <label>Name<input id="portalNameInput" type="text"/></label>
+        <div class="field-grid two"><label>θ<input id="portalThetaInput" type="number" step="1"/></label><label>Inclination<input id="portalInclinationInput" type="number" min="-90" max="90" step="1"/></label></div>
+        <label>Type<input id="portalTypeInput" type="text"/></label>
+        <label>Click action<select id="portalInteractionInput"><option value="popup">Lore popup</option><option value="scene">Open scene</option><option value="none">None</option></select></label>
+        <label>Target scene<select id="portalSceneTargetInput"></select></label>
+        <label>Lore ID<input id="portalLoreIdInput" type="text"/></label>
+        <button id="openPortalSceneBtn" type="button" class="accent scene-open" hidden>Open linked scene ↗</button>
       </section>
     </aside>
   </main>
 
-  <footer class="statusbar"><span>Kosmos.Kreator v0.2</span><span id="statusText">Ready.</span></footer>
+  <footer class="statusbar"><span>Kosmos.Kreator v0.3</span><span id="statusText">Ready.</span></footer>
   <script src="src/app.js"></script>
 </body>
 </html>
