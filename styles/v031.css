@@ -1,0 +1,53 @@
+/* v0.3.1 polish: preview mode, contextual actions, universal artwork controls */
+.context-actions {
+  position: absolute;
+  z-index: 8;
+  top: 88px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+  padding: 7px 8px;
+  border: 1px solid #424a68;
+  border-radius: 10px;
+  background: rgb(12 16 32 / 92%);
+  box-shadow: 0 12px 36px rgb(0 0 0 / 35%);
+  backdrop-filter: blur(8px);
+}
+.context-actions[hidden] { display: none; }
+.context-actions strong {
+  overflow: hidden;
+  max-width: 220px;
+  color: #eef2ff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.context-actions button { padding: 6px 9px; }
+
+.preview-mode .left-panel,
+.preview-mode .inspector-panel { display: none; }
+.preview-mode .workspace { grid-template-columns: minmax(0, 1fr); height: calc(100vh - 78px); }
+.preview-mode .statusbar { display: none; }
+.preview-mode .app-header .toolbar > :not(#previewBtn) { display: none; }
+.preview-mode .app-header { min-height: 78px; }
+.preview-mode .stage-wrap { min-height: 0; }
+
+.file-label .file-row { margin-top: 5px; }
+.v031-hidden { display: none !important; }
+
+@media (max-width: 720px) {
+  .context-actions {
+    position: fixed;
+    z-index: 20;
+    top: auto;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    max-width: none;
+    overflow-x: auto;
+  }
+  .context-actions strong { max-width: 130px; flex: 0 0 auto; }
+  .preview-mode .workspace { display: block; min-height: calc(100vh - 78px); }
+  .preview-mode .stage-wrap { min-height: calc(100vh - 78px); }
+}
